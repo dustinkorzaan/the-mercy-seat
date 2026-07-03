@@ -5,28 +5,40 @@ import slideOne from './assets/dreamstime_xxl_9064750_Wide5500.jpg'
 import slideTwo from './assets/dreamstime_xxl_11185393_Black125.jpg'
 import slideThree from './assets/dreamstime_xxl_73817519.jpg'
 
+const SLIDES = [
+  { src: slideOne, alt: 'The Mercy Seat landscape', eager: true },
+  { src: slideTwo, alt: 'The Mercy Seat monochrome', eager: false },
+  { src: slideThree, alt: 'The Mercy Seat horizon', eager: false },
+]
+
 function App() {
-  const slides = [
-    { src: slideOne, alt: 'The Mercy Seat landscape' },
-    { src: slideTwo, alt: 'The Mercy Seat monochrome' },
-    { src: slideThree, alt: 'The Mercy Seat horizon' },
-  ]
   const [activeSlide, setActiveSlide] = useState(0)
+  const [isPaused, setIsPaused] = useState(false)
 
   useEffect(() => {
+    if (isPaused) {
+      return undefined
+    }
+
     const intervalId = window.setInterval(() => {
-      setActiveSlide((previous) => (previous + 1) % slides.length)
+      setActiveSlide((previous) => (previous + 1) % SLIDES.length)
     }, 5000)
 
     return () => window.clearInterval(intervalId)
-  }, [slides.length])
+  }, [isPaused])
 
   const goToPrev = () => {
-    setActiveSlide((previous) => (previous - 1 + slides.length) % slides.length)
+    setActiveSlide((previous) => (previous - 1 + SLIDES.length) % SLIDES.length)
   }
 
   const goToNext = () => {
-    setActiveSlide((previous) => (previous + 1) % slides.length)
+    setActiveSlide((previous) => (previous + 1) % SLIDES.length)
+  }
+
+  const handleBlurCapture = (event) => {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      setIsPaused(false)
+    }
   }
 
   return (
@@ -41,20 +53,41 @@ function App() {
 
       <section className="parallax" style={{ backgroundImage: `url(${heroWhite})` }}>
         <div className="container">
-          <div className="carousel" aria-label="Featured images">
-            <button type="button" className="carousel-control prev" onClick={goToPrev}>
+          <div
+            className="carousel"
+            role="region"
+            aria-label="Featured images carousel"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+            onFocusCapture={() => setIsPaused(true)}
+            onBlurCapture={handleBlurCapture}
+          >
+            <button
+              type="button"
+              className="carousel-control prev"
+              onClick={goToPrev}
+              aria-label="Previous slide"
+              aria-controls="hero-slides"
+            >
               Prev
             </button>
-            <div className="slides-window">
+            <div className="slides-window" id="hero-slides" aria-live="polite">
               <div className="slides-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
-                {slides.map((slide) => (
-                  <figure className="slide" key={slide.src}>
+                {SLIDES.map((slide, index) => (
+                  <figure
+                    className="slide"
+                    key={slide.src}
+                    role="group"
+                    aria-roledescription="slide"
+                    aria-label={`Slide ${index + 1} of ${SLIDES.length}`}
+                    aria-hidden={index !== activeSlide}
+                  >
                     <img
                       src={slide.src}
                       alt={slide.alt}
-                      loading={slide.src === slideOne ? 'eager' : 'lazy'}
+                      loading={slide.eager ? 'eager' : 'lazy'}
                       decoding="async"
-                      fetchPriority={slide.src === slideOne ? 'high' : 'auto'}
+                      fetchPriority={slide.eager ? 'high' : 'auto'}
                       sizes="(max-width: 900px) 92vw, 1050px"
                     />
                     <figcaption>
@@ -65,19 +98,24 @@ function App() {
                 ))}
               </div>
             </div>
-            <button type="button" className="carousel-control next" onClick={goToNext}>
+            <button
+              type="button"
+              className="carousel-control next"
+              onClick={goToNext}
+              aria-label="Next slide"
+              aria-controls="hero-slides"
+            >
               Next
             </button>
-            <div className="carousel-dots" role="tablist" aria-label="Slide selector">
-              {slides.map((slide, index) => (
+            <div className="carousel-dots" role="group" aria-label="Slide selector">
+              {SLIDES.map((slide, index) => (
                 <button
                   key={slide.src + index}
                   type="button"
                   className={index === activeSlide ? 'dot active' : 'dot'}
                   onClick={() => setActiveSlide(index)}
                   aria-label={`Go to slide ${index + 1}`}
-                  aria-selected={index === activeSlide}
-                  role="tab"
+                  aria-current={index === activeSlide}
                 ></button>
               ))}
             </div>

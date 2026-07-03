@@ -98,6 +98,11 @@
   border-color: #fff;
 }
 
+.carousel-control:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
 .carousel-control.prev {
   left: 0;
 }
@@ -125,6 +130,11 @@
 
 .dot.active {
   background: #fff;
+}
+
+.dot:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
 }
 
 .section {
