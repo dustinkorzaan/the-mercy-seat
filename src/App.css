@@ -1,6 +1,6 @@
 .page {
   color: #1d1d1d;
-  background: #f6f3eb;
+  background: linear-gradient(180deg, #f7f3e9 0%, #f2eee4 100%);
 }
 
 .container {
@@ -17,10 +17,11 @@
   display: inline-block;
   color: #f2f0ea;
   text-decoration: none;
-  font-size: 1.2rem;
+  font-size: 1.25rem;
   font-weight: 600;
-  padding: 1rem 0;
-  letter-spacing: 0.04em;
+  padding: 1.1rem 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .parallax {
@@ -31,32 +32,46 @@
   padding: 2rem 0 3rem;
 }
 
-.slides {
-  display: grid;
-  gap: 1.5rem;
+.carousel {
+  position: relative;
+  padding-inline: 2.5rem;
+}
+
+.slides-window {
+  overflow: hidden;
+}
+
+.slides-track {
+  display: flex;
+  transition: transform 420ms ease;
 }
 
 .slide {
+  min-width: 100%;
   margin: 0;
   border: 1px solid rgba(255, 255, 255, 0.45);
   background: rgba(0, 0, 0, 0.35);
   overflow: hidden;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
 }
 
 .slide img {
   display: block;
   width: 100%;
-  height: auto;
+  height: min(56vw, 560px);
+  object-fit: cover;
 }
 
 .slide figcaption {
   color: #f8f8f8;
-  padding: 0.8rem 1rem 1rem;
+  padding: 0.9rem 1rem 1rem;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.14), rgba(0, 0, 0, 0.5));
 }
 
 .slide h2 {
   margin: 0;
-  font-size: 1.6rem;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  letter-spacing: 0.03em;
 }
 
 .slide p {
@@ -64,8 +79,56 @@
   opacity: 0.9;
 }
 
+.carousel-control {
+  position: absolute;
+  top: calc(50% - 1.2rem);
+  transform: translateY(-50%);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+
+.carousel-control:hover {
+  background: rgba(0, 0, 0, 0.7);
+  border-color: #fff;
+}
+
+.carousel-control.prev {
+  left: 0;
+}
+
+.carousel-control.next {
+  right: 0;
+}
+
+.carousel-dots {
+  display: flex;
+  justify-content: center;
+  gap: 0.55rem;
+  margin-top: 0.9rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  padding: 0;
+}
+
+.dot.active {
+  background: #fff;
+}
+
 .section {
-  padding: 3.25rem 0;
+  padding: clamp(2.4rem, 5vw, 3.4rem) 0;
 }
 
 .section.muted {
@@ -85,8 +148,8 @@
 
 .section h3 {
   margin: 0 0 0.75rem;
-  font-size: 1.8rem;
-  line-height: 1.2;
+  font-size: clamp(1.35rem, 2.6vw, 1.9rem);
+  line-height: 1.25;
 }
 
 .section h4 {
@@ -97,8 +160,9 @@
 
 .section p {
   margin: 0 0 1rem;
-  line-height: 1.65;
-  font-size: 1.05rem;
+  line-height: 1.72;
+  font-size: 1.06rem;
+  max-width: 62ch;
 }
 
 .section a {
@@ -108,8 +172,9 @@
 
 iframe {
   width: 100%;
-  min-height: 260px;
+  min-height: 300px;
   border: 0;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
 }
 
 @media (max-width: 900px) {
@@ -121,11 +186,37 @@ iframe {
     background-attachment: scroll;
   }
 
+  .carousel {
+    padding-inline: 0;
+  }
+
+  .carousel-control {
+    top: auto;
+    bottom: -2.5rem;
+    transform: none;
+  }
+
+  .carousel-control.prev {
+    left: calc(50% - 5.25rem);
+  }
+
+  .carousel-control.next {
+    right: calc(50% - 5.25rem);
+  }
+
+  .carousel-dots {
+    margin-top: 3.3rem;
+  }
+
   .section {
     padding: 2.4rem 0;
   }
 
   .section h3 {
     font-size: 1.45rem;
+  }
+
+  iframe {
+    min-height: 240px;
   }
 }
