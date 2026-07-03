@@ -62,15 +62,26 @@ function App() {
             onFocusCapture={() => setIsPaused(true)}
             onBlurCapture={handleBlurCapture}
           >
-            <button
-              type="button"
-              className="carousel-control prev"
-              onClick={goToPrev}
-              aria-label="Previous slide"
-              aria-controls="hero-slides"
-            >
-              Prev
-            </button>
+            <div className="carousel-top-controls">
+              <button
+                type="button"
+                className="carousel-control"
+                onClick={goToPrev}
+                aria-label="Previous slide"
+                aria-controls="hero-slides"
+              >
+                {'<'}
+              </button>
+              <button
+                type="button"
+                className="carousel-control"
+                onClick={goToNext}
+                aria-label="Next slide"
+                aria-controls="hero-slides"
+              >
+                {'>'}
+              </button>
+            </div>
             <div className="slides-window" id="hero-slides" aria-live="polite">
               <div className="slides-track" style={{ transform: `translateX(-${activeSlide * 100}%)` }}>
                 {SLIDES.map((slide, index) => (
@@ -98,15 +109,6 @@ function App() {
                 ))}
               </div>
             </div>
-            <button
-              type="button"
-              className="carousel-control next"
-              onClick={goToNext}
-              aria-label="Next slide"
-              aria-controls="hero-slides"
-            >
-              Next
-            </button>
             <div className="carousel-dots" role="group" aria-label="Slide selector">
               {SLIDES.map((slide, index) => (
                 <button

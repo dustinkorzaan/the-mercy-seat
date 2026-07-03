@@ -9,13 +9,13 @@
 }
 
 .nav {
-  background: #101010;
-  border-bottom: 1px solid #000;
+  background: #dddccf;
+  border-bottom: 1px solid #c9c7bb;
 }
 
 .brand {
   display: inline-block;
-  color: #f2f0ea;
+  color: #1d1d1d;
   text-decoration: none;
   font-size: 1.25rem;
   font-weight: 600;
@@ -35,6 +35,15 @@
 .carousel {
   position: relative;
   padding-inline: 2.5rem;
+}
+
+.carousel-top-controls {
+  position: absolute;
+  top: 0.75rem;
+  right: 3.25rem;
+  z-index: 2;
+  display: flex;
+  gap: 0.45rem;
 }
 
 .slides-window {
@@ -80,35 +89,28 @@
 }
 
 .carousel-control {
-  position: absolute;
-  top: calc(50% - 1.2rem);
-  transform: translateY(-50%);
-  border: 1px solid rgba(255, 255, 255, 0.75);
-  background: rgba(0, 0, 0, 0.45);
-  color: #fff;
-  padding: 0.4rem 0.75rem;
+  border: 1px solid rgba(80, 80, 80, 0.28);
+  background: rgba(240, 240, 240, 0.9);
+  color: #555;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
   cursor: pointer;
-  font-size: 0.9rem;
-  letter-spacing: 0.02em;
-  transition: background 160ms ease, border-color 160ms ease;
+  font-size: 1.1rem;
+  line-height: 1;
+  border-radius: 999px;
+  transition: background 160ms ease, border-color 160ms ease, color 160ms ease;
 }
 
 .carousel-control:hover {
-  background: rgba(0, 0, 0, 0.7);
-  border-color: #fff;
+  background: #fff;
+  border-color: rgba(60, 60, 60, 0.35);
+  color: #242424;
 }
 
 .carousel-control:focus-visible {
-  outline: 2px solid #fff;
+  outline: 2px solid #3d3d3d;
   outline-offset: 2px;
-}
-
-.carousel-control.prev {
-  left: 0;
-}
-
-.carousel-control.next {
-  right: 0;
 }
 
 .carousel-dots {
@@ -200,22 +202,8 @@ iframe {
     padding-inline: 0;
   }
 
-  .carousel-control {
-    top: auto;
-    bottom: -2.5rem;
-    transform: none;
-  }
-
-  .carousel-control.prev {
-    left: calc(50% - 5.25rem);
-  }
-
-  .carousel-control.next {
-    right: calc(50% - 5.25rem);
-  }
-
-  .carousel-dots {
-    margin-top: 3.3rem;
+  .carousel-top-controls {
+    right: 0.75rem;
   }
 
   .section {
