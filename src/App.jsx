@@ -45,7 +45,7 @@ function App() {
     <main className="page">
       <nav className="nav">
         <div className="container">
-          <a className="brand" href="#">
+          <a className="brand" href="/">
             The Mercy Seat
           </a>
         </div>
