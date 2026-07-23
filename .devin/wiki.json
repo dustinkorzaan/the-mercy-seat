@@ -1,0 +1,8 @@
+{
+  "repo_notes": [
+    {
+      "content": "the-mercy-seat is a React 19 single-page app built with Vite. Source lives in src/ (main.jsx is the entry point, App.jsx the root component, with App.css/index.css for styling and src/assets/ for images). Static files served as-is are in public/. Tooling: Vite (vite.config.js) for dev/build, ESLint (eslint.config.js) for linting. Documentation should focus on the app structure under src/, the Vite build/dev workflow (npm run dev / build / preview), and the ESLint setup.",
+      "author": "Dustin"
+    }
+  ]
+}
