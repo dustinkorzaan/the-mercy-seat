@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
-import heroWhite from './assets/dreamstime_xxl_11185393_White240.jpg'
-import slideOne from './assets/dreamstime_xxl_9064750_Wide5500.jpg'
-import slideTwo from './assets/dreamstime_xxl_11185393_Black125.jpg'
-import slideThree from './assets/dreamstime_xxl_73817519.jpg'
+import heroWhite from './assets/dreamstime_xxl_11185393_White240-web.jpg'
+import slideOne from './assets/dreamstime_xxl_9064750_Wide5500-web.jpg'
+import slideTwo from './assets/dreamstime_xxl_11185393_Black125-web.jpg'
+import slideThree from './assets/dreamstime_xxl_73817519-web.jpg'
 
 const SLIDES = [
   { src: slideOne, alt: 'The Mercy Seat landscape', eager: true },
