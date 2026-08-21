@@ -1,57 +1,36 @@
 name: Azure Static Web Apps CI/CD
 
 on:
-  push:
+  workflow_run:
+    workflows:
+      - Build and Test
     branches:
       - main
+    types:
+      - completed
+  workflow_dispatch:
+
+concurrency:
+  group: production-swa
+  cancel-in-progress: true
 
 permissions:
-  actions: read
-  checks: read
   contents: read
   pull-requests: write
 
 jobs:
-  confirm_the_mercy_seat_success:
-    name: Confirm the-mercy-seat-success
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Wait for the-mercy-seat-success
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          REPO: ${{ github.repository }}
-          SHA: ${{ github.sha }}
-        run: |
-          set -euo pipefail
-          run_id=""
-          for _ in $(seq 1 60); do
-            run_id=$(gh run list --repo "$REPO" --commit "$SHA" --workflow "build-and-test.yml" --limit 1 --json databaseId --jq '.[0].databaseId // empty')
-            if [ -n "$run_id" ]; then
-              break
-            fi
-            echo "Waiting for Build and Test to start..."
-            sleep 10
-          done
-          if [ -z "$run_id" ]; then
-            echo "No Build and Test run found for $SHA"
-            exit 1
-          fi
-          echo "Watching Build and Test run $run_id"
-          timeout 600 gh run watch "$run_id" --repo "$REPO" --exit-status
-          conclusion=$(gh api "repos/$REPO/commits/$SHA/check-runs" \
-            --jq '[.check_runs[] | select(.name == "the-mercy-seat-success")] | sort_by(.completed_at // .started_at) | last | .conclusion')
-          echo "the-mercy-seat-success: $conclusion"
-          test "$conclusion" = "success"
-
   build_and_deploy_job:
     name: Build and Deploy Job
-    needs: confirm_the_mercy_seat_success
-    if: github.ref == 'refs/heads/main'
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    env:
+      DEPLOYMENT_PROVIDER: Custom
+      REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
+      BRANCH: main
     steps:
       - uses: actions/checkout@v7
         with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           submodules: true
           lfs: false
       - name: Build And Deploy
