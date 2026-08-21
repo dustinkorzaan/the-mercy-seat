@@ -73,7 +73,8 @@ jobs:
                       print(f"Non-retryable API error: {error}")
                       sys.exit(1)
                   print(f"Attempt {attempt + 1} failed: {error}")
-                  time.sleep(sleep_seconds)
+                  if attempt < max_attempts - 1:
+                      time.sleep(sleep_seconds)
                   continue
 
               matches = [
@@ -85,12 +86,12 @@ jobs:
                   pending = [run for run in matches if run.get("status") != "completed"]
                   if pending:
                       print("Required check is still running.")
-                      time.sleep(sleep_seconds)
+                      if attempt < max_attempts - 1:
+                          time.sleep(sleep_seconds)
                       continue
 
-                  completed = [run for run in matches if run.get("status") == "completed"]
                   latest_completed = max(
-                      completed,
+                      matches,
                       key=lambda run: run.get("completed_at") or run.get("started_at") or "",
                   )
                   conclusion = latest_completed.get("conclusion")
@@ -101,7 +102,8 @@ jobs:
                   print(f"Required check concluded with {conclusion}.")
                   sys.exit(1)
 
-              time.sleep(sleep_seconds)
+              if attempt < max_attempts - 1:
+                  time.sleep(sleep_seconds)
 
           print("Timed out waiting for the-mercy-seat-success.")
           sys.exit(1)
