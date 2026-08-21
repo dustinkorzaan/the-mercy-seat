@@ -1,6 +1,6 @@
 # The Mercy Seat
 
-[themercyseat.com](https://themercyseat.com)
+[https://themercyseat.com](https://themercyseat.com)
 
 ## Architecture Notes
 
