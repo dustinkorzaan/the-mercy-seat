@@ -50,5 +50,5 @@ jobs:
           if [ "${{ needs.build_and_deploy_job.result }}" != "success" ]; then
             exit 1
           fi
-      - name: the-mercy-seat-success
+      - name: Report success
         run: echo "Azure Static Web Apps workflow passed."
