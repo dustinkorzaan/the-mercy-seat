@@ -14,7 +14,22 @@ permissions:
   pull-requests: write
 
 jobs:
+  the-mercy-seat-success:
+    name: the-mercy-seat-success
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+
   build_and_deploy_job:
+    needs:
+      - the-mercy-seat-success
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
     name: Build and Deploy Job
@@ -37,18 +52,3 @@ jobs:
           api_location: "" # Api source code path - optional
           output_location: "dist" # Built app content directory - optional
           ###### End of Repository/Build Configurations ######
-
-  the-mercy-seat-success:
-    name: the-mercy-seat-success
-    runs-on: ubuntu-latest
-    needs:
-      - build_and_deploy_job
-    if: always()
-    steps:
-      - name: Verify required checks passed
-        run: |
-          if [ "${{ needs.build_and_deploy_job.result }}" != "success" ]; then
-            exit 1
-          fi
-      - name: Report success
-        run: echo "Azure Static Web Apps workflow passed."
