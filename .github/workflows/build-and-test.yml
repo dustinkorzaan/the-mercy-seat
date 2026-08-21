@@ -49,10 +49,17 @@ jobs:
       - lint
     if: always()
     steps:
-      - name: Verify required checks passed
+      - name: Require build
         run: |
-          if [ "${{ needs.build.result }}" != "success" ] || [ "${{ needs.lint.result }}" != "success" ]; then
+          if [ "${{ needs.build.result }}" != "success" ]; then
+            echo "build did not succeed: ${{ needs.build.result }}"
+            exit 1
+          fi
+      - name: Require lint
+        run: |
+          if [ "${{ needs.lint.result }}" != "success" ]; then
+            echo "lint did not succeed: ${{ needs.lint.result }}"
             exit 1
           fi
       - name: Report success
-        run: echo "Build and test checks passed."
+        run: echo "Build and lint checks passed."
