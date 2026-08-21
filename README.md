@@ -1,5 +1,10 @@
-# React + Vite
+# The Mercy Seat
 
-Live site: [themercyseat.com](https://themercyseat.com)
+[themercyseat.com](https://themercyseat.com)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Business First
+
+## Tech...
+
+Simply React + Vite  
+Hosted on Azure Static Web App
