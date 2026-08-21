@@ -69,6 +69,9 @@ jobs:
               try:
                   check_runs = fetch_check_runs()
               except (urllib.error.HTTPError, urllib.error.URLError) as error:
+                  if isinstance(error, urllib.error.HTTPError) and 400 <= error.code < 500 and error.code != 429:
+                      print(f"Non-retryable API error: {error}")
+                      sys.exit(1)
                   print(f"Attempt {attempt + 1} failed: {error}")
                   time.sleep(sleep_seconds)
                   continue
@@ -85,8 +88,9 @@ jobs:
                       time.sleep(sleep_seconds)
                       continue
 
+                  completed = [run for run in matches if run.get("status") == "completed"]
                   latest_completed = max(
-                      matches,
+                      completed,
                       key=lambda run: run.get("completed_at") or run.get("started_at") or "",
                   )
                   conclusion = latest_completed.get("conclusion")
