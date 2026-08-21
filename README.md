@@ -1,16 +1,22 @@
-# React + Vite
+# The Mercy Seat
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[https://themercyseat.com](https://themercyseat.com)
 
-Currently, two official plugins are available:
+The Mercy Seat is a quiet, scripture-centered site that invites visitors to pause at the biblical image of covering and meeting with God. It presents Exodus 25:22, a brief account of the Hebrew *kapporeth*, and Sojourn Music’s recording of John Newton’s hymn “Approach My Soul The Mercy Seat.”
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The public site is the primary experience. This repository is the source for that site.
 
-## React Compiler
+## Architecture
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+The site is a React application built with Vite and published as static files on Azure Static Web Apps. There is no backend or API in this project.
 
-## Expanding the ESLint configuration
+Local development:
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+```bash
+npm install
+npm run dev
+```
+
+Then open the URL Vite prints (typically `http://localhost:5173`).
+
+A production build is created with `npm run build` and output to `dist`. Pushes and pull requests against `main` are built and deployed by GitHub Actions using the Azure Static Web Apps workflow.
