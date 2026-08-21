@@ -6,14 +6,49 @@ on:
       - main
 
 permissions:
+  actions: read
+  checks: read
   contents: read
   pull-requests: write
 
 jobs:
-  build_and_deploy_job:
+  confirm_the_mercy_seat_success:
+    name: Confirm the-mercy-seat-success
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
+    steps:
+      - name: Wait for the-mercy-seat-success
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+          SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          run_id=""
+          for _ in $(seq 1 60); do
+            run_id=$(gh run list --repo "$REPO" --commit "$SHA" --workflow "build-and-test.yml" --limit 1 --json databaseId --jq '.[0].databaseId // empty')
+            if [ -n "$run_id" ]; then
+              break
+            fi
+            echo "Waiting for Build and Test to start..."
+            sleep 10
+          done
+          if [ -z "$run_id" ]; then
+            echo "No Build and Test run found for $SHA"
+            exit 1
+          fi
+          echo "Watching Build and Test run $run_id"
+          timeout 600 gh run watch "$run_id" --repo "$REPO" --exit-status
+          conclusion=$(gh api "repos/$REPO/commits/$SHA/check-runs" \
+            --jq '[.check_runs[] | select(.name == "the-mercy-seat-success")] | sort_by(.completed_at // .started_at) | last | .conclusion')
+          echo "the-mercy-seat-success: $conclusion"
+          test "$conclusion" = "success"
+
+  build_and_deploy_job:
     name: Build and Deploy Job
+    needs: confirm_the_mercy_seat_success
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
         with:
