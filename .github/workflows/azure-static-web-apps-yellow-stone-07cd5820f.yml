@@ -1,11 +1,9 @@
 name: Azure Static Web Apps CI/CD
 
-# Production only. Called from Build and Test after the-mercy-seat-success on main.
 on:
-  workflow_call:
-    secrets:
-      AZURE_STATIC_WEB_APPS_API_TOKEN_YELLOW_STONE_07CD5820F:
-        required: true
+  push:
+    branches:
+      - main
 
 permissions:
   contents: read
@@ -16,10 +14,6 @@ jobs:
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     name: Build and Deploy Job
-    env:
-      DEPLOYMENT_PROVIDER: Custom
-      REPOSITORY_URL: ${{ github.server_url }}/${{ github.repository }}
-      BRANCH: main
     steps:
       - uses: actions/checkout@v7
         with:
